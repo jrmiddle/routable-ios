@@ -9,6 +9,18 @@
 #import "UPAppDelegate.h"
 #import "Routable.h"
 
+@interface MyNavigationController: UINavigationController
+
+@end
+
+@implementation MyNavigationController
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
+@end
+
 @interface UserController : UIViewController
 
 @end
@@ -93,6 +105,8 @@
     UINavigationController *nav = [[UINavigationController alloc] initWithNibName:nil bundle:nil];
     [[Routable sharedRouter] map:@"user" toController:[UserController class]];
     [[Routable sharedRouter] map:@"modal" toController:[ModalController class] withOptions:[[UPRouterOptions modal] withPresentationStyle:UIModalPresentationFormSheet]];
+    
+    [Routable sharedRouter].navigationControllerClass = [MyNavigationController class];
     [[Routable sharedRouter] setNavigationController:nav];
 
     [self.window setRootViewController:nav];

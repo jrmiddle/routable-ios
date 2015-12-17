@@ -245,6 +245,8 @@ typedef void (^RouterOpenCallback)(NSDictionary *params);
 /// @name Navigation Controller
 ///-------------------------------
 
+@property (nonatomic, strong) Class navigationControllerClass;
+
 /**
  The `UINavigationController` instance which mapped `UIViewController`s will be pushed onto.
  */

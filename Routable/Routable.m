@@ -197,6 +197,15 @@
 
 @implementation UPRouter
 
+- (Class)navigationControllerClass {
+
+    if (! _navigationControllerClass) {
+        _navigationControllerClass = [UINavigationController class];
+    }
+    
+    return _navigationControllerClass;
+}
+
 - (id)init {
   if ((self = [super init])) {
     self.routes = [NSMutableDictionary dictionary];
@@ -289,7 +298,22 @@
                                             completion:nil];
     }
     else {
-      UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        
+        Class ncclass = self.navigationControllerClass;
+        
+        if (![ncclass isSubclassOfClass:[UINavigationController class]]) {
+
+            @throw [NSException exceptionWithName:@"InvalidUINavigationControllerSubclass"
+                                           reason:[NSString stringWithFormat:@"%@ is not a UINavigationController subclass", NSStringFromClass(ncclass)]
+                                         userInfo:nil];
+
+        }
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-method-access"
+      UINavigationController *navigationController = [[ncclass alloc ] initWithRootViewController:controller];
+#pragma clang diagnostic pop
+        
       navigationController.modalPresentationStyle = controller.modalPresentationStyle;
       navigationController.modalTransitionStyle = controller.modalTransitionStyle;
       [self.navigationController presentViewController:navigationController
